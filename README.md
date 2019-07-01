@@ -88,8 +88,8 @@ npm run pm2
 
 **1、** 先使用以下命令，打包出一个 **dist** 文件夹
 
-```
-npm run build
+```bash
+$ npm run build
 ```
 
 <br/>
@@ -100,8 +100,8 @@ npm run build
 
 **3、** 放入服务器后先安装依赖
 
-```
-npm install
+```bash
+$ npm install
 ```
 
 <br/>
@@ -117,8 +117,8 @@ npm install
 
 > 会出现两个文件夹，**log** 是打印日志，**pids** 是自定义应用程序的 **pid** 文件
 
-```
-npm run pm2
+```bash
+$ npm run pm2
 ```
 
 * 如果出现 cross-env: command not found
@@ -128,8 +128,8 @@ npm run pm2
 <br/>
 
 * **2、node** 启动
-```
-npm start
+```bash
+$ npm start
 ```
 
 <br/>
@@ -141,7 +141,7 @@ npm start
 
 > `**注意`：修改了 `api` 地址，需要重新编译项目
 
-```
+```javascript
 let config = {
     http: 'http://localhost:3001'
     ....
@@ -156,7 +156,7 @@ module.exports = config
 
 * 因已设置了静态资源目录
 
-```
+```javascript
 app.use(express.static(path.resolve(__dirname, '../static')))
 ```
 
@@ -166,7 +166,7 @@ app.use(express.static(path.resolve(__dirname, '../static')))
 
 > 引入静态文件的时候 `href` 里不需要写 `static`
 
-```
+```javascript
 // config/index.js
 
 let config = {
@@ -191,7 +191,7 @@ let config = {
 
 * 因浏览器端渲染打包出来的 **dist** 目录不同于服务端渲染的打包目录，所以设置了如下静态资源目录
 
-```
+```javascript
 app.use('/static', express.static(path.resolve(__dirname, '../static')))
 ```
 
@@ -201,7 +201,7 @@ app.use('/static', express.static(path.resolve(__dirname, '../static')))
 
 > 因为打包之后的 **dist** 目录下，会有 **static** 静态资源文件夹，所以这样写的话，开发模式和生产模式都可以正确引用静态资源
 
-```
+```html
 // template/index.html
 
 <!DOCTYPE html>
@@ -228,7 +228,7 @@ app.use('/static', express.static(path.resolve(__dirname, '../static')))
 > 可先在 `store` 里定义 `initToken` 方法，用来保存后端传来的 `cookies`
 
 > `cookies` 只是一个形参，在下面会传进来
-```
+```javascript
 // store/mutations.js
 
 export default {
@@ -247,11 +247,11 @@ export default {
 
 > 因为在服务端渲染的过程中，是先在服务器渲染 `html`，所以会先经过服务器，需要在 `vue-ssr` 入口文件 `server.js` 里加入以下代码来获取后端传来的 `cookies`
 
-```
-npm install cookie-parser --save
+```bash
+$ npm install cookie-parser --save
 ```
 
-```
+```javascript
 // server.js
 
 const cookieParser = require('cookie-parser')
@@ -261,7 +261,7 @@ server.use(cookieParser())
 
 2、然后传入 `cookie` 到 `context`，后续使用
 
-```
+```javascript
 // server.js
 server.get('*', (req, res) => {
     ....
@@ -283,7 +283,7 @@ server.get('*', (req, res) => {
 
 3、接着到 **entry-server.js** 文件拿到上面传入的 `cookie`
 
-```
+```javascript
 // entry-server.js
 
 export default (context) => {
@@ -313,7 +313,7 @@ export default (context) => {
 
 4、然后传入的 `cookies` 可以在 `vue` 组件里的 `asyncData` 预渲染函数里使用
 
-```
+```html
 <template>
     <div>
         ....
@@ -352,7 +352,7 @@ export default {
 
 * 如果不用正则的话，传到后端的格式将会变成 `token=123&aaa=xxx` ，**qs** 模块会把 ; 转义成 &
 
-```
+```javascript
 // src/util/ajax.js
 
 ....
@@ -391,7 +391,7 @@ export default (methods, url, json, cookies) => {
 
 * `cors` 白名单，例如你想给某个网站设置允许跨域，你就需要输入此网站的域名
 
-```
+```javascript
 // 此为 node 后台代码演示
 
 app.all('*', function (req, res, next) {
@@ -415,7 +415,7 @@ app.all('*', function (req, res, next) {
 
 * 在组件里使用以下方法来获取请求是否已返回
 
-```
+```javascript
 // App.vue
 
 ....
