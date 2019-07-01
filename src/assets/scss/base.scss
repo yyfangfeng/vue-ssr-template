@@ -1,0 +1,24 @@
+body {
+    padding: 0 !important;
+    background: #f1f1f1 !important;
+
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+        margin: 0;
+    }
+
+    /* 进度条颜色 */
+    #nprogress{
+        .bar {
+            background: #5a5a5a !important;
+            height: 3px !important;
+        }  
+        .peg {
+            box-shadow: 0 0 10px #29d, 0 0 5px #29d !important;
+        }
+    }
+
+    img {
+        object-fit: cover;
+        height: 100%;
+    }
+}
