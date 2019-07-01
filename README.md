@@ -228,6 +228,7 @@ app.use('/static', express.static(path.resolve(__dirname, '../static')))
 > 可先在 `store` 里定义 `initToken` 方法，用来保存后端传来的 `cookies`
 
 > `cookies` 只是一个形参，在下面会传进来
+
 ```javascript
 // store/mutations.js
 
