@@ -18,11 +18,11 @@ let config = merge(common, {
         rules: [
             {
                 test: /\.scss$/,
-                use: ['css-loader', 'sass-loader']
+                use: ['vue-style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.css$/,
-                use: ['css-loader']
+                use: ['vue-style-loader', 'css-loader']
             }
         ]
     },
