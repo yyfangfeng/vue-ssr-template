@@ -382,6 +382,114 @@ export default (methods, url, json, cookies) => {
 
 <br/>
 
+6、实现客户端判断登陆状态
+
+> 主要是在 **entry-client.js** 文件里的导航守卫代码里添加判断
+
+
+* 先在 **router/index.js** 里添加 `is_login` 设置判断登陆状态
+
+```javascript
+// router/index.js
+
+....
+
+export function createRouter () {
+    let route = new VueRouter({
+        ....
+
+        routes: [
+            {
+                path: '/',
+                component: () => import('@/pages/Home'),
+                name: 'Home',
+                meta: {
+                    title: '主页'
+                }
+            },
+            {
+                path: '/chat',
+                component: () => import('@/pages/Chat'),
+                name: 'Chat',
+                meta: {
+                    title: '聊天',
+                    is_login: true      // 设置此页面登录状态判断
+                }
+            },
+
+            ....
+        ]
+    })
+
+    return route
+}
+```
+
+* 然后到 **entry-client.js** 文件里，添加导航守卫代码
+
+> 这里是客户端路由切换时的路由判断，可以在这里写关于 `window` 对象的操作代码
+
+```javascript
+// entry-client.js
+
+....
+
+// 路由导航守卫
+router.beforeResolve((to, from, next) => {
+
+    // 判断登陆状态
+    if (to.meta.is_login) {
+        if (store.state.cookies.token) {
+            next()
+        } else {
+
+            // 判断如果没有 token 跳转回此路由
+            next('/')
+        }
+    } else {
+        next()
+    }
+})
+
+....
+
+```
+
+> 现在便实现了客户端切换路由时的登陆状态判断问题，但还没有解决刷新页面时的登陆状态判断问题
+
+* 接着在 **entry-server.js** 文件里再添加一个路由导航守卫
+
+> 这里是在服务端渲染时的路由守卫，不可在这里写对 `window` 对象的操作
+
+```javascript
+// entry-server.js
+
+....
+
+// 路由导航守卫
+router.beforeResolve((to, from, next) => {
+
+    // 判断登陆状态
+    if (to.meta.is_login) {
+        if (store.state.cookies.token) {
+            next()
+        } else {
+
+            // 判断如果没有 token 跳转回此路由
+            next('/')
+        }
+    } else {
+        next()
+    }
+})
+
+....
+
+```
+
+
+<br/>
+
 
 ### 解决用浏览器端渲染，打包后出现接口请求跨域问题
 

@@ -15,7 +15,6 @@ if (window.__INITIAL_STATE__) {
 Vue.mixin({
 
     // 2、跳转路由后，再获取数据：
-
     beforeMount () {
         // 浏览器渲染的时候才使用，因为在 ssr 渲染下首屏会二次触发请求
         if (process.env.BOM_ENV === 'bom') {
@@ -31,6 +30,7 @@ Vue.mixin({
             }
         }
     },
+
     // 用于处理，例如，从 user/1 到 user/2 的路由时，也应该调用 asyncData 函数
     beforeRouteUpdate (to, from, next) {
         const { asyncData } = this.$options
@@ -44,19 +44,6 @@ Vue.mixin({
         }
     }
 })
-
-// router.beforeEach((to, from, next) => {
-//     console.log(to)
-//     if (to.meta.isLogin) {
-//         if (store.state.cookies.token) {
-//             next()
-//         } else {
-//             next('/container')
-//         }
-//     }else{
-//         next()
-//     }
-// })
 
 router.onReady(() => {
     
@@ -76,11 +63,11 @@ router.onReady(() => {
             // 所以我们对比它们，找出两个匹配列表的差异组件
             let diffed = false
             const activated = matched.filter((c, i) => {
-              return diffed || (diffed = (prevMatched[i] !== c))
+                return diffed || (diffed = (prevMatched[i] !== c))
             })
         
             if (!activated.length) {
-              return next()
+                return next()
             }
         
             // 这里如果有加载指示器 (loading indicator)，就触发
@@ -101,3 +88,19 @@ router.onReady(() => {
 
     app.$mount("#app")
 })
+
+
+// 路由导航守卫
+// router.beforeResolve((to, from, next) => {
+
+//     // 判断登陆状态
+//     if (to.meta.is_login) {
+//         if (store.state.cookies.token) {
+//             next()
+//         } else {
+//             next('/')
+//         }
+//     } else {
+//         next()
+//     }
+// })
