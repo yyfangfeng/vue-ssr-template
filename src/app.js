@@ -22,5 +22,28 @@ export function createApp() {
         render: h => h(App)
     })
 
+    // 路由导航守卫
+    router.beforeResolve((to, from, next) => {
+
+        // 如需使用 window 对象，必须先判断
+        if (typeof window !== 'undefined') {
+
+            // 回到顶部
+            window.scrollTo(0, 0)
+        }
+
+        // 判断登陆状态
+        // if (to.meta.is_login) {
+        //     if (store.state.cookies.token) {
+        //         next()
+        //     } else {
+        //         next('/')
+        //     }
+        // } else {
+        //     next()
+        // }
+        next()
+    })
+
     return { app, router, store }
 }

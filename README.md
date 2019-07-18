@@ -384,7 +384,7 @@ export default (methods, url, json, cookies) => {
 
 6、实现客户端判断登陆状态
 
-> 主要是在 **entry-client.js** 文件里的导航守卫代码里添加判断
+> 主要是在导航守卫代码里添加对登陆状态的判断
 
 
 * 先在 **router/index.js** 里添加 `is_login` 设置判断登陆状态
@@ -425,68 +425,50 @@ export function createRouter () {
 }
 ```
 
-* 然后到 **entry-client.js** 文件里，添加导航守卫代码
+* 然后到 **app.js** 文件里，添加导航守卫代码
 
-> 这里是客户端路由切换时的路由判断，可以在这里写关于 `window` 对象的操作代码
+> `注意：`如果需要在导航守卫里使用 `window` 对象，必须先判断 `window` 对象是否存在
 
 ```javascript
-// entry-client.js
+// app.js
 
 ....
 
-// 路由导航守卫
-router.beforeResolve((to, from, next) => {
+export function createApp() {
+    const router = createRouter()
 
-    // 判断登陆状态
-    if (to.meta.is_login) {
-        if (store.state.cookies.token) {
-            next()
-        } else {
+    ....
+    
+    // 路由导航守卫
+    router.beforeResolve((to, from, next) => {
 
-            // 判断如果没有 token 跳转回此路由
-            next('/')
+        // 如需使用 window 对象，必须先判断
+        if (typeof window !== 'undefined') {
+
+            // 回到顶部
+            window.scrollTo(0, 0)
         }
-    } else {
-        next()
-    }
-})
+
+        // 判断登陆状态
+        if (to.meta.is_login) {
+            if (store.state.cookies.token) {
+                next()
+            } else {
+                next('/')
+            }
+        } else {
+            next()
+        }
+    })
+
+    return { app, router, store }
+}
 
 ....
 
 ```
 
-> 现在便实现了客户端切换路由时的登陆状态判断问题，但还没有解决刷新页面时的登陆状态判断问题
-
-* 接着在 **entry-server.js** 文件里再添加一个路由导航守卫
-
-> 这里是在服务端渲染时的路由守卫，不可在这里写对 `window` 对象的操作
-
-```javascript
-// entry-server.js
-
-....
-
-// 路由导航守卫
-router.beforeResolve((to, from, next) => {
-
-    // 判断登陆状态
-    if (to.meta.is_login) {
-        if (store.state.cookies.token) {
-            next()
-        } else {
-
-            // 判断如果没有 token 跳转回此路由
-            next('/')
-        }
-    } else {
-        next()
-    }
-})
-
-....
-
-```
-
+> 现在便实现了客户端切换路由时的登陆状态判断问题
 
 <br/>
 

@@ -31,21 +31,5 @@ export default (context) => {
             }).catch(reject)
     
         }, reject)
-
-
-        // 路由导航守卫
-        // router.beforeResolve((to, from, next) => {
-
-        //     // 判断登陆状态
-        //     if (to.meta.is_login) {
-        //         if (store.state.cookies.token) {
-        //             next()
-        //         } else {
-        //             next('/')
-        //         }
-        //     } else {
-        //         next()
-        //     }
-        // })
     })
 }
