@@ -22,7 +22,12 @@ let config = {
                 test: /\.scss$/,
                 use: isPro
                     ? [
-                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options:{
+                                publicPath: '../../'
+                            }
+                        },
                         'css-loader',
                         'sass-loader'
                     ]
@@ -32,7 +37,12 @@ let config = {
                 test: /\.css$/,
                 use: isPro
                     ? [
-                        MiniCssExtractPlugin.loader,
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options:{
+                                publicPath: '../../'
+                            }
+                        },
                         'css-loader'
                     ]
                     : ['vue-style-loader?sourceMap', 'css-loader?sourceMap']
