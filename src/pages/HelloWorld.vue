@@ -6,10 +6,7 @@
 </template>
 <script>
 export default {
-    name: "HelloWorld",
-    title () {
-        return this.$route.meta.title
-    }
+    name: "HelloWorld"
 }
 </script>
 <style lang="scss" scoped>
