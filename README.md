@@ -135,6 +135,77 @@ $ npm start
 <br/>
 
 
+### 设置页面 title
+
+* 只需要在 **router/index.js** 里每个组件里的 `meta` 配置即可
+
+```javascript
+// router/index.js
+
+export function createRouter () {
+    let route = new VueRouter({
+        mode: process.env.BOM_ENV === 'bom'
+              ? 'hash'
+              : 'history',
+        routes: [
+            {
+                path: '/',
+                component: Home,
+                name: 'home',
+                meta: {
+                    title: '首页'       // 只需要这样设置 title 即可
+                }
+            }
+            ....
+        ]
+    })
+```
+
+* 服务端渲染 的默认 `title` 是在 **config/index.js** 里设置的
+
+> `注意：` 与 `浏览器端渲染` 不同，可按需求设置
+
+```javascript
+// config/index.js
+
+let config = {
+    http: 'http://localhost:3001',
+
+    // html 模板配置
+    template_context: {
+        title: 'vue-ssr-template',      // 页面默认 title
+        ....
+    }
+}
+
+module.exports = config
+```
+
+
+* 浏览器端渲染 的默认 `title` 是在 **template/index.html** 里设置
+
+> `注意：` 与 `服务端渲染` 不同，可按需求设置
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 页面默认 title -->
+    <title>vue-ssr-template</title>
+
+    ....
+</head>
+<body>
+    <div id="app"></div>
+</body>
+</html>
+```
+
+<br/>
+
+
 ### 修改 api 地址
 
 * 在 **config/index.js** 里的 `http` 配置
