@@ -292,7 +292,7 @@ app.use('/static', express.static(path.resolve(__dirname, '../static')))
 
 <br/>
 
-### 保存用户登录状态步骤
+### 保存发送 cookie 步骤
 
 > 用户登录状态需要保存在 `cookie`，后端设置 `cookie`
 
@@ -449,97 +449,8 @@ export default (methods, url, json, cookies) => {
 
 ```
 
-> 这样就实现了保存用户登录状态的操作
+> 这样就实现了保存 cookie 操作
 
-<br/>
-
-6、实现客户端判断登陆状态
-
-> 主要是在导航守卫代码里添加对登陆状态的判断
-
-
-* 先在 **router/index.js** 里添加 `is_login` 设置判断登陆状态
-
-```javascript
-// router/index.js
-
-....
-
-export function createRouter () {
-    let route = new VueRouter({
-        ....
-
-        routes: [
-            {
-                path: '/',
-                component: () => import('@/pages/Home'),
-                name: 'Home',
-                meta: {
-                    title: '主页'
-                }
-            },
-            {
-                path: '/chat',
-                component: () => import('@/pages/Chat'),
-                name: 'Chat',
-                meta: {
-                    title: '聊天',
-                    is_login: true      // 设置此页面登录状态判断
-                }
-            },
-
-            ....
-        ]
-    })
-
-    return route
-}
-```
-
-* 然后到 **app.js** 文件里，添加导航守卫代码
-
-> `注意：`如果需要在导航守卫里使用 `window` 对象，必须先判断 `window` 对象是否存在
-
-```javascript
-// app.js
-
-....
-
-export function createApp() {
-    const router = createRouter()
-
-    ....
-    
-    // 路由导航守卫
-    router.beforeResolve((to, from, next) => {
-
-        // 如需使用 window 对象，必须先判断
-        if (typeof window !== 'undefined') {
-
-            // 回到顶部
-            window.scrollTo(0, 0)
-        }
-
-        // 判断登陆状态
-        if (to.meta.is_login) {
-            if (store.state.cookies.token) {
-                next()
-            } else {
-                next('/')
-            }
-        } else {
-            next()
-        }
-    })
-
-    return { app, router, store }
-}
-
-....
-
-```
-
-> 现在便实现了客户端切换路由时的登陆状态判断问题
 
 <br/>
 
